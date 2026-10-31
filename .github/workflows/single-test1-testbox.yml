@@ -13,7 +13,9 @@ on:
 jobs:
   test1:
     name: Cypress test
-    if: github.repository_owner == 'cypress-io' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    # Nothing here records, so no owner check is needed. Skip pull requests
+    # from forks so outside code does not run on Blacksmith runners.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Begin Testbox
